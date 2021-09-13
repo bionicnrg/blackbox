@@ -1,0 +1,17 @@
+// select UV border edges and remove edges that share uvs with the borders
+// thus eliminating any unwanted internal edges
+string $currSelected[] = `ls -sl -o`;
+string $temp[] = `ls ($currSelected[0]+".map[*]")`;
+select $temp;
+polySelectBorderShell 1;
+PolySelectConvert 20;
+string $potentialEdges[]=`filterExpand -ex 1 -sm 32`;
+string $removedEdges[];
+for($eachEdge in $potentialEdges)
+{
+        string $uvs[] =`polyListComponentConversion -fe -tuv $eachEdge`;
+        $uvs = `ls -fl $uvs`;
+        if(size($uvs)<=2)
+                $removedEdges[size($removedEdges)] = $eachEdge;
+}
+select -d $removedEdges;

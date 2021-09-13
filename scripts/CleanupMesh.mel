@@ -1,0 +1,473 @@
+onSetCurrentLayout "HS PolyFlowOPS";
+file -f -new;
+// Result: untitled // 
+// cgfxShader 4.5 for Maya LT 2017.0 (Jun 15 2016) // 
+updateRendererUI;
++++++++ Turtle for Maya registered successfully ++++++
+onSetCurrentLayout "HS PolyFlowOPS";
+file -f -new;
+// Result: untitled // 
+// cgfxShader 4.5 for Maya LT 2017.0 (Jun 15 2016) // 
+updateRendererUI;
++++++++ Turtle for Maya registered successfully ++++++;
+// Error: +++++++ Turtle for Maya registered successfully ++++++; // 
+// Error: Line 6.4: Syntax error // 
+proc highPolyPreview() {
+
+string $sel[] = `ls -sl`;
+
+string $shape[] = `listRelatives -type mesh $sel`;
+
+int $currentCrease = `getAttr ($shape[0]+".smoothLevel")`;
+
+
+
+
+
+// TURN ON
+
+if ($currentCrease == 0 || $currentCrease == 2)
+
+{
+
+for ($i=0; $i<(size($shape)); $i++)
+
+{
+
+if ($sel[$i]==""){break;}
+
+select $sel[$i];
+
+polySelectConstraint -m 3 -t 0x8000 -sm 1; // to get hard edges
+
+polyCrease -value 3.0;
+
+displaySmoothness -divisionsU 3 -divisionsV 3 -pointsWire 16 -pointsShaded 4 -polygonObject 3;
+
+setAttr ($shape[$i]+".smoothLevel") 4;
+
+polySelectConstraint -sm 0; // turn off edge smoothness constraint
+
+select $sel;
+
+}
+
+}
+
+//TURN OFF
+
+//Toggle off high poly preview
+
+else
+
+{
+
+for ($i=0; $i<(size($shape)); $i++)
+
+{
+
+if ($sel[$i]==""){break;}
+
+select $sel[$i];
+
+displaySmoothness -divisionsU 0 -divisionsV 0 -pointsWire 4 -pointsShaded 1 -polygonObject 1;
+
+PolyRemoveAllCrease;
+
+setAttr ($shape[$i]+".smoothLevel") 2;
+
+select $sel;
+
+}
+
+}
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+// a function to be called when the button gets clicked.
+
+proc finalizeMesh() {
+
+//EXPORT
+
+file -force -options "v=0" -typ "mayaBinary" -pr -es "Documents/temp.mb";
+
+
+
+
+
+string $sel[] = `ls -sl`;
+
+for ($x in $sel)
+
+{
+
+select $x;
+
+polySelectConstraint -m 3 -t 0x8000 -sm 1; // to get hard edges
+
+polyBevel3 -fraction 0.5 -offsetAsFraction 1 -autoFit 1 -depth 1 -mitering 0 -miterAlong 0 -chamfer 0 -segments 1 -worldSpace 1 -smoothingAngle 30 -subdivideNgons 1 -mergeVertices 1 -mergeVertexTolerance 0.0001 -miteringAngle 180 -angleTolerance 180 ;
+
+polySelectConstraint -sm 0; // turn off edge smoothness constraint
+
+}
+
+}
+
+
+
+
+
+proc revertMesh() {
+
+ls -sl;
+
+delete;
+
+
+
+
+
+ls -sl;
+
+delete;
+
+
+
+
+
+//IMPORT
+
+file -import -type "mayaBinary" -rpr "temp" -options "v=0" -pr -loadReferenceDepth "all" "Documents/temp.mb";
+
+
+
+
+
+}
+
+
+
+
+
+// create a window
+
+window;
+
+if (`window -exists autoHighPoly`) deleteUI autoHighPoly;
+
+window -title "autoHighPoly" -widthHeight 300 194 autoHighPoly;
+
+if (`windowPref -exists autoHighPoly`) windowPref -remove autoHighPoly;
+
+showWindow autoHighPoly;
+
+// define the layout of controls added
+
+// to the window.
+
+columnLayout;
+
+columnLayout -adjustableColumn true;
+
+
+
+
+
+
+
+
+
+setParent ..;
+
+columnLayout -h 62 -cat "both" 0 -cal "center" -cw 300;
+
+// create a button
+
+button -label "Preview" -h 60 -w 300 -command "highPolyPreview" ;
+
+
+
+
+
+setParent ..;
+
+columnLayout -h 62 -cat "both" 0 -cal "center" -cw 300;
+
+// create a button
+
+button -label "Finalize" -h 60 -w 300 -command "finalizeMesh" ;
+
+
+
+
+
+setParent ..;
+
+columnLayout -cat "both" 0 -cal "center" -cw 300;
+
+
+
+
+
+// create a button
+
+button -label "Revert " -h 60 -w 300 -command "revertMesh" ;
+
+// show the window we last created
+
+showWindow autoHighPoly;
+onSetCurrentLayout "HS PolyFlowOPS";
+file -f -new;
+// Result: untitled // 
+// cgfxShader 4.5 for Maya LT 2017.0 (Jun 15 2016) // 
+updateRendererUI;
++++++++ Turtle for Maya registered successfully ++++++;
+// Error: +++++++ Turtle for Maya registered successfully ++++++; // 
+// Error: Line 6.4: Syntax error // 
+int $x = 1;
+int $y = 3;
+
+print $x;
+print $y;
+13int $x = 1;
+int $y = 3;
+
+print $x;
+print "\n";
+print $y;
+1
+3polySphere -r 1 -sx 20 -sy 20 -ax 0 1 0 -cuv 2 -ch 1;
+// Result: pSphere1 polySphere1 // 
+select -r pSphere1 ;
+move -r 0 108.116903 0 ;
+move -r 0 0 257.837894 ;
+scale -r 110.313466 110.313466 110.313466 ;
+select -cl  ;
+select -r pSphere1 ;
+select -cl  ;
+select -r pSphere1 ;
+#selection = 'ls -sl:
+for($object in $selection)
+(
+    delete -ch;
+    makeIdentity -apply true -1 1 -r 1 -s 1 -n 0;
+    move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+// Error: #selection = 'ls -sl:
+ // 
+// Error: Line 1.0: invalid directive // 
+// Error: for($object in $selection)
+ // 
+// Error: Line 2.26: "$selection" is an undeclared variable. // 
+// Error:     move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot"); // 
+// Error: Line 6.25: "$object" is an undeclared variable. // 
+// Error:     move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot"); // 
+// Error: Line 6.51: "$object" is an undeclared variable. // 
+select -cl  ;
+#selection = 'ls -sl:
+for($object in $selection)
+(
+    delete -ch;
+    makeIdentity -apply true -1 1 -r 1 -s 1 -n 0;
+    move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+// Error: #selection = 'ls -sl:
+ // 
+// Error: Line 1.0: invalid directive // 
+// Error: for($object in $selection)
+ // 
+// Error: Line 2.26: "$selection" is an undeclared variable. // 
+// Error:     move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot"); // 
+// Error: Line 6.25: "$object" is an undeclared variable. // 
+// Error:     move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot"); // 
+// Error: Line 6.51: "$object" is an undeclared variable. // 
+select -r pSphere1 ;
+#selection = 'ls -sl:
+for($object in $selection)
+(
+    delete -ch;
+    makeIdentity -apply true -1 1 -r 1 -s 1 -n 0;
+    move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+// Error: #selection = 'ls -sl:
+ // 
+// Error: Line 1.0: invalid directive // 
+// Error: for($object in $selection)
+ // 
+// Error: Line 2.26: "$selection" is an undeclared variable. // 
+// Error:     move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot"); // 
+// Error: Line 6.25: "$object" is an undeclared variable. // 
+// Error:     move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot"); // 
+// Error: Line 6.51: "$object" is an undeclared variable. // 
+#selection = 'ls -sl':
+for($object in $selection)
+(
+    delete -ch;
+    makeIdentity -apply true -1 1 -r 1 -s 1 -n 0;
+    move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+// Error: #selection = 'ls -sl':
+ // 
+// Error: Line 1.0: invalid directive // 
+// Error: for($object in $selection)
+ // 
+// Error: Line 2.26: "$selection" is an undeclared variable. // 
+// Error:     move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot"); // 
+// Error: Line 6.25: "$object" is an undeclared variable. // 
+// Error:     move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot"); // 
+// Error: Line 6.51: "$object" is an undeclared variable. // 
+select -cl  ;
+select -r pSphere1 ;
+#selection = `ls -sl`:
+for($object in $selection)
+(
+    delete -ch;
+    makeIdentity -apply true -1 1 -r 1 -s 1 -n 0;
+    move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+// Error: #selection = `ls -sl`:
+ // 
+// Error: Line 1.0: invalid directive // 
+// Error: for($object in $selection)
+ // 
+// Error: Line 2.26: "$selection" is an undeclared variable. // 
+// Error:     move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot"); // 
+// Error: Line 6.25: "$object" is an undeclared variable. // 
+// Error:     move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot"); // 
+// Error: Line 6.51: "$object" is an undeclared variable. // 
+select -cl  ;
+select -r pSphere1 ;
+#selection = `ls -sl`;
+for($object in $selection)
+(
+    delete -ch;
+    makeIdentity -apply true -1 1 -r 1 -s 1 -n 0;
+    move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+// Error: #selection = `ls -sl`;
+ // 
+// Error: Line 1.0: invalid directive // 
+// Error: for($object in $selection)
+ // 
+// Error: Line 2.26: "$selection" is an undeclared variable. // 
+// Error:     move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot"); // 
+// Error: Line 6.25: "$object" is an undeclared variable. // 
+// Error:     move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot"); // 
+// Error: Line 6.51: "$object" is an undeclared variable. // 
+#selection = `ls -sl`;
+for($object in $selection)
+(
+    delete -ch;
+    makeIdentity -apply true -1 1 -r 1 -s 1 -n 0;
+    move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+);
+// Error: #selection = `ls -sl`;
+ // 
+// Error: Line 1.0: invalid directive // 
+// Error: for($object in $selection)
+ // 
+// Error: Line 2.26: "$selection" is an undeclared variable. // 
+// Error:     move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+ // 
+// Error: Line 6.25: "$object" is an undeclared variable. // 
+// Error:     move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+ // 
+// Error: Line 6.51: "$object" is an undeclared variable. // 
+// Error: ); // 
+// Error: Line 7.1: Syntax error // 
+#selection = `ls -sl`;
+for($object in $selection)
+{
+    delete -ch;
+    makeIdentity -apply true -1 1 -r 1 -s 1 -n 0;
+    move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+};
+// Error: #selection = `ls -sl`;
+ // 
+// Error: Line 1.0: invalid directive // 
+// Error: for($object in $selection)
+ // 
+// Error: Line 2.26: "$selection" is an undeclared variable. // 
+// Error:     move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+ // 
+// Error: Line 6.25: "$object" is an undeclared variable. // 
+// Error:     move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+ // 
+// Error: Line 6.51: "$object" is an undeclared variable. // 
+select -cl  ;
+$selection = `ls -sl`;
+for($object in $selection)
+{
+    delete -ch;
+    makeIdentity -apply true -1 1 -r 1 -s 1 -n 0;
+    move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+};
+select -r pSphere1 ;
+$selection = `ls -sl`;
+for($object in $selection)
+{
+    delete -ch;
+    makeIdentity -apply true -1 1 -r 1 -s 1 -n 0;
+    move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+};
+// Error: line 5: Invalid object or value: -1 // 
+$selection = `ls -sl`;
+for($object in $selection)
+{
+    delete -ch;
+    makeIdentity -apply true -1 1 -r 1 -s 1 -n 0;
+    move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+};
+// Error: line 5: Invalid object or value: -1 // 
+select -cl  ;
+select -r pSphere1 ;
+$selection = `ls -sl`;
+for($object in $selection)
+{
+    delete -ch;
+    makeIdentity -apply true -1 1 -r 1 -s 1 -n 0;
+    move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+};
+// Error: line 5: Invalid object or value: -1 // 
+select -cl  ;
+select -r pSphere1 ;
+$selection = `ls -sl`;
+for($object in $selection)
+{
+    delete -ch;
+    makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+    move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+};
+select -cl  ;
+select -r pSphere1 ;
+scale -r 1.219645 1.219645 1.219645 ;
+move -r -444.152278 -133.143101 544.009604 pSphere1.scalePivot pSphere1.rotatePivot ;
+select -cl  ;
+$selection = `ls -sl`;
+for($object in $selection)
+{
+    delete -ch;
+    makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+    move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+};
+select -r pSphere1 ;
+$selection = `ls -sl`;
+for($object in $selection)
+{
+    delete -ch;
+    makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+    move 0 0 0 ($object + ".scalePivot") ($object + ".rotatePivot");
+};
+select -cl  ;
+select -r pSphere1 ;

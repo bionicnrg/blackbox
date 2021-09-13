@@ -1,0 +1,48 @@
+
+if (`window -exists baseWin2`) deleteUI baseWin2;
+window -title "ModOps" -sizeable false baseWin2;
+
+columnLayout -adjustableColumn true;
+
+button -w 60 -h 60 -l "Split Tool" -c "polysplit";
+button -w 60 -h 60 -l "Target Weld" -c "tgtweld";
+button -w 60 -h 60 -l "Merge" -c "polymerge";
+button -w 60 -h 60 -l "Delete History" -c "delhist";
+button -w 60 -h 60 -l "Bridge" -c "bridgepoly";
+button -w 60 -h 60 -l "close" -c "closeit";
+
+showWindow baseWin2;
+
+
+proc polysplit()
+{
+    SplitPolygonTool;
+}
+
+proc tgtweld()
+{
+    MergeVertexTool;
+}
+
+proc polymerge()
+{
+    performPolyMerge 0;
+}
+
+proc delhist()
+{
+   DeleteAllHistory;
+}
+
+proc bridgepoly()
+{
+   performPolyBridgeEdge 0;
+}
+
+proc closeit()
+{
+    deleteUI -window baseWin2;
+}
+
+
+
